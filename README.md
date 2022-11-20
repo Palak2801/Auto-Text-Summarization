@@ -1,7 +1,7 @@
 # Auto-Text-Summarization
 -> Auto Text Summarization is the technique of producing a concise summary while preserving key information and overall meaning.
 -> Text summarization will reduce the reading time and will help in finding more information in less time by extracting only relevant information, and
-facilitate better retrieval of information
+facilitate better retrieval of information.
 
 The project contains 4 separate Interfaces:
 1.) Home Page Interface
