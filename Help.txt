@@ -1,0 +1,15 @@
+The project is divided into 3 different Buttons : 
+
+1. Tkinter TextBox Summary interface: It provides Graphical User Interface to
+end users to summarise the text entered in input text box.
+
+2. Tkinter URL Summary interface: It provides Graphical User Interface to end
+users to summarise the whole text content of a webpage by using the site’s
+URL.
+
+3. Tkinter Document Text Summary interface: It provides Graphical User
+Interface to end users to summarise the text present in Document file.
+At last a final GUI is created which combines all the three interfaces.
+
+
+

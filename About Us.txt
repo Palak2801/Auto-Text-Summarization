@@ -1,0 +1,13 @@
+Auto Text Summarization is the technique of producing a concise summary
+while preserving key information and overall meaning.
+
+Text summarization will reduce the reading time and will help in finding
+more information in less time by extracting only relevant information, and
+facilitate better retrieval of information.
+
+
+This Project is made by :
+
+Palak Gupta
+Priya Singh Raghav
+Raghav Bhandari
