@@ -596,7 +596,7 @@ def main_window():
     height = 150)
 
     # TEXTBOX INTERFACE BUTTON
-    textImg = PhotoImage(file = r"Final Main GUI\textImg_u1.png")
+    textImg = PhotoImage(file = r"Final Main GUI\textImg_u.png")
     b2 = Button(
     image = textImg,
     borderwidth = 0,
@@ -612,7 +612,7 @@ def main_window():
     height = 142)
 
     # URL INTERFACE
-    UrlImg = PhotoImage(file = r"Final Main GUI\UrlImg_u1.png")
+    UrlImg = PhotoImage(file = r"Final Main GUI\UrlImg_u.png")
     b3 = Button(
     image = UrlImg,
     borderwidth = 0,
