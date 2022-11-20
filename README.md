@@ -30,5 +30,5 @@ Help.txt : File contains detail/description of project
     python -m spacy download en_core_web_sm
 3.) tkinter version 8.6
 4.) BeautifulSoup4 version 
-    pip inatall BeautifulSoup4
+    pip install BeautifulSoup4
 5.) Create an empty folder "Documents"
