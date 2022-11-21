@@ -12,7 +12,7 @@ import spacy_summarization as text_summarizer
 counter = [0,0]
 my_dir=''
 plain_text=''
-filepath  = "D:\python(full)\Project\Documents\Summary.txt"
+filepath = ""
 files = [ #('All Files','.*'),
         ('Text File', '*.txt'),
         ('Document File', '*.docx'),
@@ -47,46 +47,46 @@ def doc_sum_open(window):
     relief = "ridge")
     doc_canvas.place(x = 0, y = 0)
 
-    background_img = PhotoImage(file = r"Doc Text Summarizer GUI\doc_bg_u.png")
-    background = doc_canvas.create_image(
+    doc_background_img = PhotoImage(file = r"Doc Text Summarizer GUI\bg.png")
+    doc_background = doc_canvas.create_image(
     # 650.5, 129.0,
     515,300,
-    image=background_img)
+    image=doc_background_img)
 
     # Summary Display Text Box
-    textBox0_img = PhotoImage(file = r"Doc Text Summarizer GUI\img_textBox0_u.png")
-    textBox0_bg = doc_canvas.create_image(
+    doc_textBox0_img = PhotoImage(file = r"Doc Text Summarizer GUI\img_textBox0.png")
+    doc_textBox0_bg = doc_canvas.create_image(
     715, 315.0,
-    image = textBox0_img)
+    image = doc_textBox0_img)
 
-    textBox0 = scrolledtext.ScrolledText(
+    doc_textBox0 = scrolledtext.ScrolledText(
     master=doc_canvas,
     bd = 0,
     bg = "#d9d9d9",
     wrap = WORD,
     highlightthickness = 0)
 
-    textBox0.place(
+    doc_textBox0.place(
     x = 465, y = 180,
     width = 500,
     height = 270)
 
     # Entry Text Box
-    entry0_img = PhotoImage(file = r"Doc Text Summarizer GUI\img_textBox1_u.png")
-    entry0_bg = doc_canvas.create_image(
+    doc_entry0_img = PhotoImage(file = r"Doc Text Summarizer GUI\img_textBox1.png")
+    doc_entry0_bg = doc_canvas.create_image(
     650, 112.5,
-    image = entry0_img)
+    image = doc_entry0_img)
 
-    entry0 = Entry(
+    doc_entry0 = Entry(
     master=doc_canvas,
     font=("Helvetica 12"),
     bd = 0,
     bg = "#d9d9d9",
     highlightthickness = 0)
 
-    entry0.insert(0,r"D:\python(full)\Project\Documents")
+    doc_entry0.insert(0,r"D:\python(full)\Project\Documents")
 
-    entry0.place(
+    doc_entry0.place(
     x = 465, y = 88,
     width = 380,
     height = 50)
@@ -94,7 +94,7 @@ def doc_sum_open(window):
 
     ## ---- FUNCTIONS ----
     # Function that let user select the file(.txt) he/she want to summarize from local system
-    def document_sel_btn_clicked(entry0):
+    def document_sel_btn_clicked(doc_entry0):
         global counter
         if counter[0]<1:
             global my_dir
@@ -102,47 +102,45 @@ def doc_sum_open(window):
             my_dir = filedialog.askopenfilename(filetypes=files,defaultextension=files,
             initialdir=r"Documents")
             if(my_dir):
-                entry0.delete(0,END)
-                entry0.insert(0,my_dir)
+                doc_entry0.delete(0,END)
+                doc_entry0.insert(0,my_dir)
         counter=[0,0]
 
     # Clear input textbox and display textbox widget
-    def document_reset_btn_clicked(textBox0,entry0):
+    def document_reset_btn_clicked(doc_textBox0,doc_entry0):
         global my_dir,counter
         counter=[0,0]
         my_dir=""
         if os.path.isfile(filepath):
             os.remove(filepath)
-            entry0.delete(0,END)
-            textBox0.delete("1.0","end")
+            doc_entry0.delete(0,END)
+            doc_textBox0.delete("1.0","end")
             messagebox.showinfo("Message","Successfully Reset!")
-        elif len(entry0.get()) != 0:
-            entry0.delete(0,END)
-            textBox0.delete("1.0","end")
+        elif len(doc_entry0.get()) != 0:
+            doc_entry0.delete(0,END)
+            doc_textBox0.delete("1.0","end")
             messagebox.showinfo("Message","Successfully Reset!")
         else:
             messagebox.showerror("Error","Already Reset!")
 
     # Function that read file content and then call summary function to generate summary
-    def document_summary_btn_clicked(textBox0):
+    def document_summary_btn_clicked(doc_textBox0):
         if not os.path.isfile(my_dir):
-            messagebox.showinfo("Message","No such file found!")
+            messagebox.showerror("Message","No such file found!")
         else:
-            print("Directory is " + my_dir)
             file_obj=open(my_dir,mode='r',encoding="utf-8")
             plain_text=file_obj.read()
             file_obj.close()
-            summary_text = text_summarizer.text_summarizer(plain_text,4)
-            textBox0.insert(END,"                                     Summary\n\n",)
-            textBox0.insert(END,summary_text)            
-            f=open(filepath,'w')
-            f.write(summary_text)
-            f.close()
+            summary_text = text_summarizer.text_summarizer(plain_text,7)
+            doc_textBox0.insert(END,"                         Summary\n\n",)
+            doc_textBox0.insert(END,summary_text)            
 
     # Function that Save the generated summary in a specified .txt file
     def document_save_btn_clicked():
-        if not os.path.isfile(filepath) and not os.path.isfile(my_dir):
-            messagebox.showinfo("Message","No such file found!")
+        if filepath=="":
+            messagebox.showerror("Error","No file selected!")
+        elif not os.path.isfile(filepath) and not os.path.isfile(my_dir):
+            messagebox.showerror("Error","No such file found!")
         else:
             if os.path.isfile(filepath):
                 save_file_dir = filepath
@@ -155,7 +153,6 @@ def doc_sum_open(window):
                 plain_text=file_obj.read()
                 file_obj.close()
                 summary_text = text_summarizer.text_summarizer(plain_text,7)
-            print("Directory is " + save_file_dir)
             global counter
             if counter[1]<1:
                 counter[1]+1
@@ -170,12 +167,11 @@ def doc_sum_open(window):
         if bol_ans == True:
             doc_window.destroy()
             window.deiconify()
-        print("Button Clicked")
 
 
     ## ---- BUTTONS ----
     # HOME BUTTON
-    document_home_img = PhotoImage(file = r"Doc Text Summarizer GUI\DocHome_Button.png")
+    document_home_img = PhotoImage(file = r"Doc Text Summarizer GUI\Home_Button.png")
     document_home_button = Button(
     master=doc_canvas,
     image = document_home_img,
@@ -199,7 +195,7 @@ def doc_sum_open(window):
     image = document_reset_img ,
     borderwidth = 0,
     highlightthickness = 0,
-    command = lambda : document_reset_btn_clicked(textBox0=textBox0,entry0=entry0),
+    command = lambda : document_reset_btn_clicked(doc_textBox0=doc_textBox0,doc_entry0=doc_entry0),
     bd=0,
     activebackground="#1e1e1e",
     background="#1e1e1e",
@@ -217,7 +213,7 @@ def doc_sum_open(window):
     image = document_summary_img,
     borderwidth = 0,
     highlightthickness = 0,
-    command = lambda : document_summary_btn_clicked(textBox0=textBox0),
+    command = lambda : document_summary_btn_clicked(doc_textBox0=doc_textBox0),
     bd=0,
     activebackground="#1e1e1e",
     background="#1e1e1e",
@@ -252,7 +248,7 @@ def doc_sum_open(window):
     image = document_select_img,
     borderwidth = 0,
     highlightthickness = 0,
-    command = lambda : document_sel_btn_clicked(entry0=entry0),
+    command = lambda : document_sel_btn_clicked(doc_entry0=doc_entry0),
     bd=0,
     activebackground="#1e1e1e",
     relief = "flat")
@@ -278,35 +274,83 @@ def doc_sum_open(window):
 def url_sum_open(window):
     url_window = Toplevel(window)
     window.withdraw()
-    url_window.title("URL GUI")
     url_window.geometry("1024x600+100+20")
+    url_window.title("URL Text Summarizer")
+    url_window.iconbitmap(r"URL Text Summarizer GUI\textsummary.ico")
+    url_window.configure(bg = "#141012")
 
-    # Frame Layout
-    textBox = Frame(url_window)
-    textBox.pack(side=TOP, fill=X)
+    # Canvas Layout
+    url_canvas = Canvas(
+    url_window,
+    bg = "#141012",
+    height = 600,
+    width = 1024,
+    bd = 0,
+    highlightthickness = 0,
+    relief = "ridge")
+    url_canvas.place(x = 0, y = 0)
 
-    # FUNCTIONS
+    url_background_img = PhotoImage(file = r"URL Text Summarizer GUI\bg.png")
+    url_background = url_canvas.create_image(
+    515,300,
+    image=url_background_img)
+
+    # Summary Display Text Box
+    url_display_textbox_img = PhotoImage(file = r"URL Text Summarizer GUI\img_textBox0.png")
+    url_display_textbox_bg = url_canvas.create_image(
+    715, 315.0,
+    image = url_display_textbox_img)
+
+    url_display_textbox = scrolledtext.ScrolledText(
+    master=url_canvas,
+    bd = 0,
+    bg = "#d9d9d9",
+    wrap = WORD,
+    highlightthickness = 0)
+
+    url_display_textbox.place(
+    x = 465, y = 180,
+    width = 500,
+    height = 270)
+
+    # Entry Text Box
+    url_entry = Entry(
+    master=url_canvas,
+    font=("Helvetica 12"),
+    bd = 0,
+    bg = "#d9d9d9",
+    highlightthickness = 0)
+
+    url_entry.insert(0,r"Paste Your URL link here")
+
+    url_entry.place(
+    x = 465, y = 88,
+    width = 500,
+    height = 50)
+
+
+    ## ---- FUNCTIONS ----
     # Function that Read text entered and then call summary function to generate summary
     def get_url_summary():
-        if (len(str(urll_entry.get()))!=1):
-            raw_text = str(urll_entry.get())
+        if (len(str(url_entry.get()))!=0 and str(url_entry.get())!='Paste Your URL link here'):
+            raw_text = str(url_entry.get())
             page = urlopen(raw_text)
             # print(len(final_text))
             # if len(final_text)==0:
             #     messagebox.showerror("Error", "Unable to generate summary due to forbidden site!")
             soup = BeautifulSoup(page,features="html.parser")
             fetched_text = ' '.join(map(lambda p:p.text,soup.find_all('p')))
-            final_text = text_summarizer.text_summarizer(fetched_text,5)
+            final_text = text_summarizer.text_summarizer(fetched_text,10)
             # else:
-            result = '\nSummary:{}'.format(final_text)
-            url_display_textbox.insert(END,result)	          
+            url_display_textbox.insert(END,"                         Summary\n",)
+            url_display_textbox.insert(END,final_text)	          
         else:
             messagebox.showerror("Error", "Input textbox is empty!")
 
     # Function that Clear input textbox and display textbox widget
     def url_clear_text():
-        if len(urll_entry.get()) != 1:
-            urll_entry.delete(0,END)
+        if len(url_entry.get()) != 0 and (url_entry.get())!='Paste Your URL link here':
+            url_entry.delete(0,END)
             url_display_textbox.delete('1.0', END)
             messagebox.showinfo("Message", "Successfully Reset!")
         else:
@@ -314,9 +358,9 @@ def url_sum_open(window):
 
     # Function that Save the generated summary in a specified .txt file
     def url_save_summary():
-        raw_text = str(urll_entry.get())
-        if (len(raw_text)) != 1:
-            final_text = text_summarizer.text_summarizer(raw_text,5)
+        raw_text = str(url_entry.get())
+        if (len(raw_text)) != 0 and (url_entry.get())!='Paste Your URL link here':
+            final_text = text_summarizer.text_summarizer(raw_text,10)
             file_name = filedialog.asksaveasfilename(
                 filetypes=files, defaultextension='.txt')
             with open(file_name, 'w', encoding='utf-8') as sv:
@@ -329,34 +373,89 @@ def url_sum_open(window):
         else:
             messagebox.showerror("Error", "Input textbox is empty!")
 
-    url_l1=Label(textBox,text="Enter URL To Summarize",background='grey', foreground='white')
-    url_l1.grid(row=1,column=0,pady=(15, 0), padx=(18, 0))
+    # Function that takes you back to home page
+    def url_home_btn_clicked():
+        bol_ans=messagebox.askokcancel("Message","Go to Home Page ?")
+        if bol_ans == True:
+            url_window.destroy()
+            window.deiconify()
 
-    raww_entry=StringVar()
-    urll_entry=Entry(textBox,textvariable=raww_entry,width=50)
-    urll_entry.grid(row=1,column=1)
 
-    # BUTTONS
-    buttonn1 = Button(textBox, text="Reset", command=url_clear_text,
-                    width=12, bg='#cd201f', fg='#fff')
-    buttonn1.grid(row=4, column=0, padx=5, pady=5)
+    ## ---- BUTTONS ----
+    # HOME BUTTON
+    url_home_img = PhotoImage(file = r"URL Text Summarizer GUI\Home_Button.png")
+    url_home_button = Button(
+    master=url_canvas,
+    image = url_home_img,
+    borderwidth = 0,
+    highlightthickness = 0,
+    command = lambda : url_home_btn_clicked(),
+    bd=0,
+    activebackground="#59192b",
+    background="#59192b",
+    relief = "flat")
 
-    buttonn2 = Button(textBox, text="Summarize", command=get_url_summary,
-                    width=12, bg='#03A9F4', fg='#fff')
-    buttonn2.grid(row=4, column=1, padx=10)
+    url_home_button.place(
+    x = 180, y = 500,
+    width = 61,
+    height = 61)
 
-    buttonn3 = Button(textBox, text="Save", command=url_save_summary,
-                    width=12, bg='#25D366', fg='#fff')
-    buttonn3.grid(row=4, column=2, padx=13)
+    # RESET BUTTON
+    url_reset_img  = PhotoImage(file = r"URL Text Summarizer GUI\Reset_Button.png")
+    url_reset_button = Button(
+    master=url_canvas,
+    image = url_reset_img ,
+    borderwidth = 0,
+    highlightthickness = 0,
+    command = lambda : url_clear_text(),
+    bd=0,
+    activebackground="#1e1e1e",
+    background="#1e1e1e",
+    relief = "flat")
 
-    # Resultant Summary display text Area
-    url_l2 = Label(textBox, text="                                                                                    Resultant Summary                                                                                     ", background='grey', foreground='white')
-    url_l2.grid(row=6, column=0, columnspan=3, pady=(20, 0), padx=(17, 0))
-    url_display_textbox = ScrolledText(textBox)
-    url_display_textbox.grid(row=7, column=0, columnspan=3, padx=(35, 0), pady=(0, 10))
+    url_reset_button.place(
+    x = 840, y = 500,
+    width = 119,
+    height = 48)
+
+    # SUMMARY BUTTON
+    url_summary_img = PhotoImage(file = r"URL Text Summarizer GUI\Summary_Button.png")
+    url_summary_button = Button(
+    master=url_canvas,    
+    image = url_summary_img,
+    borderwidth = 0,
+    highlightthickness = 0,
+    command = lambda : get_url_summary(),
+    bd=0,
+    activebackground="#1e1e1e",
+    background="#1e1e1e",
+    relief = "flat")
+
+    url_summary_button.place(
+    x = 470, y = 500,
+    width = 119,
+    height = 48)
+
+    # SAVE BUTTON
+    url_save_img= PhotoImage(file = r"URL Text Summarizer GUI\Save_Button.png")
+    url_save_button = Button(
+    master=url_canvas,
+    image = url_save_img,
+    borderwidth = 0,
+    highlightthickness = 0,
+    command = url_save_summary,
+    bd=0,
+    activebackground="#1e1e1e",
+    relief = "flat")
+
+    url_save_button.place(
+    x = 655, y = 500,
+    width = 119,
+    height = 48)
 
     url_window.resizable(False, False)
-
+    
+    # FUNCTION TO CLOSE WINDOW ABRUPTLY 
     def doSomething():
         window.deiconify()
         url_window.destroy()
@@ -372,7 +471,7 @@ def text_sum_open(window):
     window.withdraw()
     text_window.geometry("1024x600+100+20")
     text_window.title("Text Summarizer")
-    window.iconbitmap(r"Simple Text Summarizer GUI\textsummary.ico")
+    text_window.iconbitmap(r"Simple Text Summarizer GUI\textsummary.ico")
 
     # Canvas Layout
     texbox_canvas = Canvas(
@@ -384,7 +483,7 @@ def text_sum_open(window):
         relief = "ridge")
     texbox_canvas.place(x = 0, y = 0)
 
-    textbox_background_img = PhotoImage(file = r'Simple Text Summarizer GUI\final_bg_u.png')
+    textbox_background_img = PhotoImage(file = r'Simple Text Summarizer GUI\bg.png')
     textbox_background = texbox_canvas.create_image(
         0, 0,
         image=textbox_background_img,
@@ -395,7 +494,7 @@ def text_sum_open(window):
     def get_summary():
         raw_text = str(input_textBox.get('1.0',END)) # get whatever text entered in input box
         if (len(raw_text)) != 1:
-            final_text = text_summarizer.text_summarizer(raw_text,4) 
+            final_text = text_summarizer.text_summarizer(raw_text,5) 
             result = '\nSummary:{}'.format(final_text) # final resultant text to display on GUI
             display_textBox.insert(END,result) # display_textBox is result display screen 
         else:
@@ -414,7 +513,7 @@ def text_sum_open(window):
     def save_summary():
         raw_text = str(input_textBox.get('1.0',END)) # get whatever text entered in input box
         if (len(raw_text)) != 1:
-            final_text = text_summarizer.text_summarizer(raw_text,4)
+            final_text = text_summarizer.text_summarizer(raw_text,5)
             file_name=filedialog.asksaveasfilename(filetypes = files, defaultextension = '.txt')
             with open(file_name,'w',encoding='utf-8') as sv:
                 sv.write(final_text)
@@ -431,7 +530,6 @@ def text_sum_open(window):
         if bol_ans == True:
             text_window.destroy()
             window.deiconify()
-        print("Button Clicked")
 
     # Title label
     title_lbl = Label(texbox_canvas,text="Sumr!zer",font=("Helvetica",24,"bold"),bg="#1e1e1e",fg="white")
@@ -559,7 +657,7 @@ def close(window):
 def main_window():
     window = Tk()
     window.overrideredirect(True)
-    window.geometry("1230x600+10+20")
+    window.geometry("1230x640+20+20")
     window.configure(bg = "#0f0f11")
 
     canvas = Canvas(
